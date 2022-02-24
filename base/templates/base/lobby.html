@@ -1,0 +1,61 @@
+{% extends 'base/main.html' %}
+
+
+
+{% block content %}
+<main>
+
+    <section id="form-container">
+        <div id="logo">
+            <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_zwwwgco2.json" background="transparent"  speed="1"  style="width: 300px; height: 300px;" loop autoplay></lottie-player>
+        </div>
+
+        <div>
+            <h1 id="welcome">
+                Welcome to Video.Me
+            </h1>
+
+            <p id="tagline">A Group Video Calling Application By Dhiransh Saxena</p>
+        </div>
+
+        <form id="form">
+            <div class="form-field">
+                <input type="text" name="room" placeholder="Enter A Room Name" style="text-transform: uppercase;"/>
+            </div>
+            <div class="form-field">
+                <input type="text" name="username" placeholder="Enter Your Display Name" style="text-transform: uppercase;"/>
+            </div>
+            <div class="form-field">
+                <input type="submit" value="Join Stream" />
+            </div>
+        </form>
+
+    </section>
+    
+</main>
+<script type="text/javascript">
+    let form = document.getElementById('form')
+
+    let handleSubmit = async(e) => {
+        e.preventDefault()
+
+        let name = e.target.username.value.toUpperCase()
+        let room = e.target.room.value.toUpperCase()
+
+        let response = await fetch(`/get_token/?channel=${room}`)
+        let data = await response.json()
+
+        let UID = data.uid
+        let token = data.token
+
+        sessionStorage.setItem('UID', UID)
+        sessionStorage.setItem('token', token)
+        sessionStorage.setItem('room', room)
+        sessionStorage.setItem('name', name)
+
+        window.open('/room/', '_self')
+    }
+
+    form.addEventListener('submit', handleSubmit)
+</script>
+{% endblock content %}
